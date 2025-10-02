@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rialo Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* align at top */
+      min-height: 100vh;       /* page can grow */
+      margin: 0;
+      padding: 20px;
+      overflow-y: auto;        /* force vertical scroll if needed */
+    }
+    .quiz-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h1 { text-align: center; }
+    .controls { margin-top: 20px; text-align: center; }
+    button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background: #005bb5; }
+    .counter {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Rialo Quiz</h1>
+    <div id="quiz"></div>
+    <div class="controls">
+      <button id="submitBtn">Submit Quiz</button>
+    </div>
+    <div id="result" class="counter"></div>
+    <div id="counterDisplay" class="counter"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What does Rialo aim to simplify?",
+        options: ["Blockchain trading", "Agent economy", "Social media", "Cloud storage"],
+        answer: "Agent economy"
+      },
+      {
+        question: "Which feature helps ensure Rialo is safe?",
+        options: ["Decentralized exchanges", "AI moderation", "Verification system", "Encrypted wallets"],
+        answer: "Verification system"
+      },
+      {
+        question: "Rialo was introduced to make agents more:",
+        options: ["Complex", "Accessible", "Expensive", "Centralized"],
+        answer: "Accessible"
+      },
+      {
+        question: "Which platform is Rialo focusing on?",
+        options: ["Gaming", "Agent marketplace", "Video streaming", "Messaging"],
+        answer: "Agent marketplace"
+      }
+    ];
+
+    const quizEl = document.getElementById("quiz");
+    const submitBtn = document.getElementById("submitBtn");
+    const resultText = document.getElementById("result");
+    const counterDisplay = document.getElementById("counterDisplay");
+
+    let counter = 0; // participation counter
+
+    function loadQuiz() {
+      quizEl.innerHTML = "";
+      quizData.forEach((q, i) => {
+        const questionEl = document.createElement("div");
+        questionEl.innerHTML = `<p><strong>${i+1}. ${q.question}</strong></p>`;
+        q.options.forEach(opt => {
+          questionEl.innerHTML += `
+            <label>
+              <input type="radio" name="q${i}" value="${opt}"> ${opt}
+            </label><br>
+          `;
+        });
+        quizEl.appendChild(questionEl);
+      });
+    }
+
+    submitBtn.addEventListener("click", () => {
+      let score = 0;
+      quizData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && selected.value === q.answer) {
+          score++;
+        }
+      });
+
+      resultText.textContent = `You scored ${score}/${quizData.length}`;
+      counter++;
+      counterDisplay.textContent = `Total participants: ${counter}`;
+    });
+
+    loadQuiz();
+  </script>
+</body>
+</html>
